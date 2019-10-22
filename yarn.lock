@@ -78,6 +78,13 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@teselagen/react-list@0.8.16":
+  version "0.8.16"
+  resolved "https://registry.yarnpkg.com/@teselagen/react-list/-/react-list-0.8.16.tgz#27bd62a714c20c418d14b58225cef47473064c2c"
+  integrity sha512-ooXRYIRaQN0QE7QV2U2/FZ2SACVAXHACfCFJqckeLauaqv7tgUBX95aV9NlPNtVwODmOMoaHXDVla/4fFgWVoQ==
+  dependencies:
+    prop-types "15"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -3330,14 +3337,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.8:
-  version "15.5.10"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
-  dependencies:
-    fbjs "^0.8.9"
-    loose-envify "^1.3.1"
-
-prop-types@^15.6.0:
+prop-types@15, prop-types@^15.6.0, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -3345,6 +3345,13 @@ prop-types@^15.6.0:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
     react-is "^16.8.1"
+
+prop-types@^15.5.8:
+  version "15.5.10"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
+  dependencies:
+    fbjs "^0.8.9"
+    loose-envify "^1.3.1"
 
 ps-tree@^1.1.0:
   version "1.1.0"

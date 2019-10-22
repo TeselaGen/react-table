@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
-//
+import ReactList from '@teselagen/react-list'
+// import ReactList from './ReactList'
 import _ from './utils'
 import Lifecycle from './lifecycle'
 import Methods from './methods'
 import defaultProps from './defaultProps'
 import propTypes from './propTypes'
 
+const estimateRowHeight = () => 41.36
 export const ReactTableDefaults = defaultProps
 
 export default class ReactTable extends Methods(Lifecycle(Component)) {
@@ -850,7 +852,15 @@ export default class ReactTable extends Methods(Lifecycle(Component)) {
             }}
             {...tBodyProps.rest}
           >
-            {pageRows.map((d, i) => makePageRow(d, i))}
+            {
+              pageRows.length < 200 ? pageRows.map((d, i) => makePageRow(d, i)) :
+              <ReactList
+                type="variable"
+                itemSizeEstimator={this.props.estimateRowHeight || estimateRowHeight}
+                itemRenderer={i => makePageRow(pageRows[i], i)}
+                length={pageRows.length}
+              />
+            }
             {padRows.map(makePadRow)}
           </TbodyComponent>
           {hasColumnFooter ? makeColumnFooters() : null}
