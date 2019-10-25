@@ -44,7 +44,7 @@
     "docs:build": "yarn build && cd docs && yarn && yarn build"
   },
   "dependencies": {
-    "@teselagen/react-list": "0.8.16",
+    "@teselagen/react-list": "0.8.17",
     "classnames": "^2.2.5"
   },
   "peerDependencies": {
