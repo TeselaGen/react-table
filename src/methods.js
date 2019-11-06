@@ -13,7 +13,7 @@ export default Base =>
       return resolvedState
     }
 
-    getDataModel (newState, dataChanged) {
+    getDataModel (newState) {
       const {
         columns,
         pivotBy = [],
@@ -127,8 +127,8 @@ export default Base =>
 
       visibleColumns = visibleColumns.map(column => {
         if (column.columns) {
-          const visibleSubColumns = column.columns.filter(d =>
-            pivotBy.indexOf(d.id) > -1 ? false : _.getFirstDefined(d.show, true)
+          const visibleSubColumns = column.columns.filter(
+            d => (pivotBy.indexOf(d.id) > -1 ? false : _.getFirstDefined(d.show, true))
           )
           return {
             ...column,
@@ -138,12 +138,13 @@ export default Base =>
         return column
       })
 
-      visibleColumns = visibleColumns.filter(column =>
-        column.columns
-          ? column.columns.length
-          : pivotBy.indexOf(column.id) > -1
-            ? false
-            : _.getFirstDefined(column.show, true)
+      visibleColumns = visibleColumns.filter(
+        column =>
+          column.columns
+            ? column.columns.length
+            : pivotBy.indexOf(column.id) > -1
+              ? false
+              : _.getFirstDefined(column.show, true)
       )
 
       // Find any custom pivot location
@@ -237,16 +238,7 @@ export default Base =>
         }
         return row
       }
-
-      // // If the data hasn't changed, just use the cached data
-      let resolvedData = this.resolvedData
-      // If the data has changed, run the data resolver and cache the result
-      if (!this.resolvedData || dataChanged) {
-        resolvedData = resolveData(data)
-        this.resolvedData = resolvedData
-      }
-      // Use the resolved data
-      resolvedData = resolvedData.map((d, i) => accessRow(d, i))
+      let resolvedData = resolveData(data).map((d, i) => accessRow(d, i))
 
       // TODO: Make it possible to fabricate nested rows without pivoting
       const aggregatingColumns = allVisibleColumns.filter(d => !d.expander && d.aggregate)
@@ -307,23 +299,22 @@ export default Base =>
         filtered,
         defaultFilterMethod,
         resolvedData,
+        allVisibleColumns,
         allDecoratedColumns,
       } = resolvedState
 
       const sortMethodsByColumnID = {}
 
-      allDecoratedColumns
-        .filter(col => col.sortMethod)
-        .forEach(col => {
-          sortMethodsByColumnID[col.id] = col.sortMethod
-        })
+      allDecoratedColumns.filter(col => col.sortMethod).forEach(col => {
+        sortMethodsByColumnID[col.id] = col.sortMethod
+      })
 
       // Resolve the data from either manual data or sorted data
       return {
         sortedData: manual
           ? resolvedData
           : this.sortData(
-            this.filterData(resolvedData, filtered, defaultFilterMethod, allDecoratedColumns),
+            this.filterData(resolvedData, filtered, defaultFilterMethod, allVisibleColumns),
             sorted,
             sortMethodsByColumnID
           ),
@@ -331,15 +322,7 @@ export default Base =>
     }
 
     fireFetchData () {
-      // determine the current state, preferring certain state values over props
-      const currentState = {
-        ...this.getResolvedState(),
-        page: this.getStateOrProp('page'),
-        pageSize: this.getStateOrProp('pageSize'),
-        filtered: this.getStateOrProp('filtered'),
-      }
-
-      this.props.onFetchData(currentState, this)
+      this.props.onFetchData(this.getResolvedState(), this)
     }
 
     getPropOrState (key) {
@@ -624,15 +607,8 @@ export default Base =>
 
     resizeColumnMoving (event) {
       event.stopPropagation()
-      const { onResizedChange, column } = this.props
-      const { resized, currentlyResizing, columns } = this.getResolvedState()
-      const currentColumn = columns.find(
-        c => c.accessor === currentlyResizing.id || c.id === currentlyResizing.id
-      )
-      const minResizeWidth =
-        currentColumn && currentColumn.minResizeWidth != null
-          ? currentColumn.minResizeWidth
-          : column.minResizeWidth
+      const { onResizedChange } = this.props
+      const { resized, currentlyResizing } = this.getResolvedState()
 
       // Delete old value
       const newResized = resized.filter(x => x.id !== currentlyResizing.id)
@@ -645,9 +621,11 @@ export default Base =>
         pageX = event.pageX
       }
 
+      // Set the min size to 10 to account for margin and border or else the
+      // group headers don't line up correctly
       const newWidth = Math.max(
         currentlyResizing.parentWidth + pageX - currentlyResizing.startX,
-        minResizeWidth
+        11
       )
 
       newResized.push({
