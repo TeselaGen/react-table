@@ -107,6 +107,7 @@ export default class ReactTable extends Methods(Lifecycle(Component)) {
       TableComponent,
       TheadComponent,
       TbodyComponent,
+      additionalBodyEl,
       TrGroupComponent,
       TrComponent,
       ThComponent,
@@ -861,6 +862,7 @@ export default class ReactTable extends Methods(Lifecycle(Component)) {
               />
             }
             {padRows.map(makePadRow)}
+            {additionalBodyEl}
           </TbodyComponent>
           {hasColumnFooter ? makeColumnFooters() : null}
         </TableComponent>
