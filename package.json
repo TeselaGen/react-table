@@ -15,8 +15,8 @@
     "react-table",
     "datagrid"
   ],
-  "main": "src/index.js",
-  "module": "src/index.js",
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "files": [
     "src/",
     "es/",
