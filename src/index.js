@@ -34,27 +34,6 @@ export default class ReactTable extends Methods(Lifecycle(Component)) {
     this.resizeColumnEnd = this.resizeColumnEnd.bind(this)
     this.resizeColumnMoving = this.resizeColumnMoving.bind(this)
 
-    setTimeout(() => {
-      // tnw: this is some very hacky code to set the initial column widths
-      try {
-        const newResized = this.props.defaultResized || []
-        this.tableRef.querySelectorAll('.tg-react-table-column-header').forEach(th => {
-          const { width } = th.parentNode.parentNode.getBoundingClientRect()
-          const id = th.getAttribute('data-path')
-          if (!newResized.find(x => x.id === id)) {
-            newResized.push({
-              id,
-              value: width,
-            })
-          }
-        })
-        this.setState({
-          resized: newResized,
-        })
-      } catch (e) {
-        console.warn('TNW: Error setting initial table column widths (please contact @tnrich if you see this error. thanks!):', e)
-      }
-    }, 0)
 
     this.state = {
       page: props.defaultPage,
