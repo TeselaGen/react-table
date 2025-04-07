@@ -9,6 +9,7 @@ import propTypes from './propTypes'
 
 const itemSizeEstimator = () => 41.36
 export const ReactTableDefaults = defaultProps
+export const VIRTUALIZE_CUTOFF_LENGTH = 200
 
 export default class ReactTable extends Methods(Lifecycle(Component)) {
   static propTypes = propTypes
@@ -861,12 +862,13 @@ export default class ReactTable extends Methods(Lifecycle(Component)) {
             {...tBodyProps.rest}
           >
             {
-              pageRows.length < 200 ? pageRows.map((d, i) => makePageRow(d, i)) :
-              <ReactList
-                type="variable"
-                itemSizeEstimator={this.props.itemSizeEstimator || itemSizeEstimator}
-                itemRenderer={i => makePageRow(pageRows[i], i)}
-                length={pageRows.length}
+              this.props.noVirtual || pageRows.length < VIRTUALIZE_CUTOFF_LENGTH
+                ? pageRows.map((d, i) => makePageRow(d, i))
+                : <ReactList
+                  type="variable"
+                  itemSizeEstimator={this.props.itemSizeEstimator || itemSizeEstimator}
+                  itemRenderer={i => makePageRow(pageRows[i], i)}
+                  length={pageRows.length}
               />
             }
             {padRows.map(makePadRow)}
